@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth bg-[#050505]">
+<html lang="id" class="scroll-smooth bg-[#050505]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>ARDA DEV | Creative Web Developer</title>
-    <meta name="description" content="Portfolio of Arda Dinata, Web Developer focusing on modern websites and Android APK conversions.">
+    <title>ARDA DEV | Digital Developer</title>
+    <meta name="description" content="Profil dan Layanan Arda Dinata, Digital Developer yang berfokus pada website modern dan pembuatan aplikasi Android berbasis WebView.">
     
     <!-- Google Fonts: Syne (Display), Space Grotesk (Accent), Inter (Body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,6 @@
                         body: ['Inter', 'sans-serif'],
                     },
                     letterSpacing: {
-                        tighter: '-0.05em',
                         widest: '0.2em',
                     }
                 }
@@ -56,7 +55,7 @@
         html, body {
             width: 100%;
             max-width: 100%;
-            overflow-x: clip; /* Safely clips decorative off-canvas elements without affecting layout */
+            overflow-x: hidden; /* Mencegah horizontal scrolling tidak diinginkan */
             background-color: var(--dark);
             color: var(--offwhite);
             font-family: theme('fontFamily.body');
@@ -121,9 +120,10 @@
             .magnetic-wrap a, .magnetic-wrap button { transform: none !important; transition: transform 0.2s ease-out !important; }
         }
 
-        /* Typography Visual FX */
-        .text-stroke { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.15); }
-        .text-stroke-thick { color: transparent; -webkit-text-stroke: clamp(1px, 0.2vw, 2px) rgba(255,255,255,0.8); }
+        /* Typography Visual FX - DIperbaiki agar tidak meleyot/menumpuk */
+        .text-stroke { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
+        /* Ketebalan statis 1.5px mencegah teks distorsi di layar HP */
+        .text-stroke-thick { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.8); }
         .text-stroke-red { color: transparent; -webkit-text-stroke: 1px var(--crimson); }
         .glow-red { box-shadow: 0 0 clamp(30px, 8vw, 60px) 10px rgba(200, 16, 46, 0.3); }
         .text-glow { text-shadow: 0 0 clamp(15px, 4vw, 30px) rgba(200, 16, 46, 0.6); }
@@ -133,38 +133,26 @@
             z-index: 0; opacity: 0.3; background: var(--crimson); pointer-events: none;
         }
 
-        /* Animations */
+        /* Animations - Dihapus transform scale yang dapat merusak font */
         .reveal {
-            opacity: 0; transform: translateY(clamp(20px, 4vw, 40px)) scale(0.98);
+            opacity: 0; transform: translateY(clamp(20px, 4vw, 40px)); 
             transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); will-change: opacity, transform;
         }
-        .reveal.active { opacity: 1; transform: translateY(0) scale(1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
         .magnetic-wrap { display: inline-block; max-width: 100%; }
 
         /* Tech Lines */
         .tech-line-v { width: 1px; background: rgba(255,255,255,0.05); position: absolute; top: 0; bottom: 0; }
         .tech-line-h { height: 1px; background: rgba(255,255,255,0.05); position: absolute; left: 0; right: 0; }
-
-        /* Images */
-        .cinematic-img-wrapper {
-            position: relative; overflow: hidden; display: block; width: 100%; max-width: 100%;
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .cinematic-img-wrapper img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s;
-        }
-        .cinematic-img-wrapper::after {
-            content: ''; position: absolute; inset: 0; pointer-events: none; transition: opacity 0.5s;
-            background: linear-gradient(to top, rgba(5,5,5,0.9), transparent 50%, rgba(200,16,46,0.1));
-        }
-        @media (hover: hover) {
-            .cinematic-img-wrapper:hover img { transform: scale(1.05) rotate(1deg); filter: contrast(1.1) grayscale(0.2); }
-            .cinematic-img-wrapper:hover::after { opacity: 0.3; }
-        }
+        
+        /* Layout utility for safe areas in Android WebView */
+        .safe-padding { padding-bottom: env(safe-area-inset-bottom); }
+        
+        /* Utility untuk mengatasi teks overflow dengan pembungkusan yang aman */
+        .text-wrap-normal { white-space: normal; overflow-wrap: break-word; word-break: break-word; }
     </style>
 </head>
-<body class="antialiased relative w-full">
+<body class="antialiased relative w-full safe-padding">
 
     <div class="noise"></div>
     <div class="fixed inset-0 bg-grid pointer-events-none z-0"></div>
@@ -172,17 +160,19 @@
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline" data-text="VIEW"></div>
 
+    <!-- Navigation -->
     <nav class="fixed w-full z-50 top-0 py-4 md:py-6 px-5 sm:px-6 md:px-12 flex justify-between items-start transition-all duration-500 pointer-events-none" id="navbar">
-        <a href="#" class="font-display font-bold text-xl md:text-[clamp(1.25rem,4vw,1.5rem)] tracking-tighter text-white hover-target mix-blend-difference pointer-events-auto leading-none shrink-0">
-            <span class="block whitespace-nowrap">ARDA</span>
-            <span class="block whitespace-nowrap text-crimson">DEV.</span>
+        <!-- Font dinormalkan, spasi stabil, leading 1.2 -->
+        <a href="#" class="font-display font-bold text-xl md:text-[clamp(1.25rem,4vw,1.5rem)] tracking-normal text-white hover-target mix-blend-difference pointer-events-auto leading-[1.2] pb-1 shrink-0 flex items-center gap-1">
+            <span>ARDA</span><span class="text-crimson">DEV.</span>
         </a>
         
         <div class="hidden md:flex gap-6 lg:gap-10 font-accent text-xs font-semibold text-gray-400 tracking-widest pointer-events-auto bg-darker/60 backdrop-blur-xl px-6 lg:px-8 py-4 border border-white/5 rounded-full">
-            <a href="#about" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">01</span> ABOUT</a>
-            <a href="#services" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">02</span> SERVICES</a>
-            <a href="#work" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">03</span> WORK</a>
-            <a href="#contact" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">04</span> CONTACT</a>
+            <a href="#about" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">01</span> PROFIL</a>
+            <a href="#skills" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">02</span> KEAHLIAN</a>
+            <a href="#services" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">03</span> LAYANAN</a>
+            <a href="#workflow" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">04</span> PROSES</a>
+            <a href="#contact" class="hover-target hover:text-white transition-colors relative group whitespace-nowrap"><span class="text-crimson mr-1 opacity-50 group-hover:opacity-100">05</span> KONTAK</a>
         </div>
 
         <button id="mobile-menu-btn" class="md:hidden text-white pointer-events-auto hover-target focus:outline-none flex flex-col gap-[6px] justify-center w-12 h-12 z-50 bg-black/50 backdrop-blur p-3 rounded-full border border-white/10 shrink-0">
@@ -191,168 +181,332 @@
         </button>
     </nav>
 
+    <!-- Mobile Nav -->
     <div id="mobile-nav" class="fixed inset-0 bg-darker/95 backdrop-blur-xl z-40 flex flex-col justify-center items-start pl-8 sm:pl-12 gap-6 opacity-0 pointer-events-none transition-all duration-500 overflow-y-auto">
         <p class="font-accent text-crimson text-xs sm:text-sm tracking-widest mb-2">MENU</p>
-        <a href="#about" class="mobile-link font-display text-[clamp(2.5rem,10vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-tighter leading-none block whitespace-nowrap">ABOUT</a>
-        <a href="#services" class="mobile-link font-display text-[clamp(2.5rem,10vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-tighter leading-none block whitespace-nowrap">SERVICES</a>
-        <a href="#work" class="mobile-link font-display text-[clamp(2.5rem,10vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-tighter leading-none block whitespace-nowrap">WORK</a>
-        <a href="#contact" class="mobile-link font-display text-[clamp(2.5rem,10vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-tighter leading-none block whitespace-nowrap">CONTACT</a>
+        <a href="#about" class="mobile-link font-display text-[clamp(2.25rem,9vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-normal leading-[1.2] pb-1 block">PROFIL</a>
+        <a href="#skills" class="mobile-link font-display text-[clamp(2.25rem,9vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-normal leading-[1.2] pb-1 block">KEAHLIAN</a>
+        <a href="#services" class="mobile-link font-display text-[clamp(2.25rem,9vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-normal leading-[1.2] pb-1 block">LAYANAN</a>
+        <a href="#workflow" class="mobile-link font-display text-[clamp(2.25rem,9vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-normal leading-[1.2] pb-1 block">PROSES KERJA</a>
+        <a href="#contact" class="mobile-link font-display text-[clamp(2.25rem,9vw,4rem)] font-black text-white hover:text-crimson transition-all uppercase tracking-normal leading-[1.2] pb-1 block">KONTAK</a>
     </div>
 
     <main class="relative z-10 w-full">
         
+        <!-- 1. HERO / PROFIL UTAMA -->
         <section id="hero" class="relative min-h-[100svh] flex flex-col justify-center px-5 sm:px-6 md:px-12 pt-28 pb-16 lg:pt-0 lg:pb-0 w-full">
             
             <div class="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                <div class="bg-glow-orb w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] top-0 right-0 -translate-y-1/2 translate-x-1/4"></div>
+                <div class="bg-glow-orb w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] top-1/2 right-1/4 -translate-y-1/2 translate-x-1/4 opacity-40"></div>
                 <div class="tech-line-v left-5 sm:left-1/4 opacity-30 md:opacity-100"></div>
-                <div class="tech-line-v right-5 sm:right-1/4 hidden md:block"></div>
-                <div class="tech-line-h top-1/4 opacity-30 md:opacity-100"></div>
+                <div class="tech-line-h top-1/3 opacity-30 md:opacity-100"></div>
             </div>
 
-            <div class="w-full max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+            <div class="w-full max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
                 
-                <div class="lg:col-span-7 xl:col-span-8 relative z-20 mix-blend-difference order-2 lg:order-1 mt-4 md:mt-8 lg:mt-0 w-full">
-                    <p class="font-accent text-crimson text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 md:mb-6 reveal block whitespace-nowrap">Creative Developer</p>
+                <div class="lg:col-span-7 xl:col-span-8 relative z-20 mix-blend-difference mt-4 md:mt-8 lg:mt-0 w-full">
+                    <div class="flex items-center gap-4 mb-4 md:mb-6 reveal text-wrap-normal">
+                        <div class="w-8 h-[1px] bg-crimson shrink-0"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-sm tracking-[0.2em] md:tracking-[0.3em] uppercase font-bold">Digital Developer</p>
+                    </div>
                     
-                    <!-- strictly bounded typography scale. 8.5vw is extremely safe down to 320px for 12 characters -->
-                    <h1 class="font-display font-extrabold text-[clamp(1.65rem,8.5vw,4rem)] md:text-[clamp(4rem,10vw,12rem)] leading-[0.9] md:leading-[0.85] tracking-tighter text-white uppercase flex flex-col w-full">
-                        <span class="block whitespace-nowrap reveal" style="transition-delay: 100ms;">I BUILD</span>
-                        <span class="block whitespace-nowrap text-transparent text-stroke-thick reveal" style="transition-delay: 200ms;">DIGITAL</span>
-                        <span class="block whitespace-nowrap reveal text-glow" style="transition-delay: 300ms;">EXPERIENCES.</span>
+                    <!-- Line-height dinaikkan ke 1.2 dan tracking normal agar font tidak gepeng/terpotong -->
+                    <h1 class="font-display font-extrabold text-[clamp(2rem,7.5vw,5.5rem)] md:text-[clamp(3.5rem,7vw,7rem)] leading-[1.2] tracking-normal text-white uppercase flex flex-col w-full pb-2">
+                        <span class="block reveal text-wrap-normal" style="transition-delay: 100ms;">I BUILD</span>
+                        <span class="block text-transparent text-stroke-thick reveal text-wrap-normal" style="transition-delay: 200ms;">DIGITAL</span>
+                        <span class="block reveal text-glow text-wrap-normal" style="transition-delay: 300ms;">EXPERIENCES.</span>
                     </h1>
                     
-                    <div class="mt-8 md:mt-12 flex flex-col sm:flex-row gap-6 md:gap-8 items-start sm:items-center reveal" style="transition-delay: 400ms;">
-                        <p class="font-body text-gray-400 text-sm md:text-base w-full sm:max-w-sm leading-relaxed border-l-2 border-crimson pl-4 text-balance">
-                            Web Developer yang merancang website modern, responsive, dan custom untuk bisnis, brand, dan konversi APK.
-                        </p>
-                        <div class="magnetic-wrap shrink-0">
-                            <a href="#work" class="hover-target flex items-center justify-center w-24 h-24 md:w-32 md:h-32 rounded-full border border-white/20 bg-black/50 backdrop-blur text-white font-accent font-bold text-[10px] md:text-xs tracking-widest uppercase hover:bg-crimson hover:border-crimson transition-all duration-300 text-center">
-                                View<br>Work
-                            </a>
-                        </div>
+                    <p class="font-body text-gray-400 text-sm md:text-base lg:text-lg w-full max-w-2xl leading-relaxed border-l-2 border-crimson pl-4 mt-6 reveal text-wrap-normal" style="transition-delay: 400ms;">
+                        Saya mengembangkan website responsif dan aplikasi berbasis HTML, CSS, serta JavaScript. Saya juga dapat membangun aplikasi Android dengan antarmuka dan fungsi yang dirancang sesuai kebutuhan, kemudian mengemasnya melalui Android WebView menggunakan Android Code Studio.
+                    </p>
+
+                    <div class="mt-10 md:mt-12 flex flex-wrap gap-4 sm:gap-6 items-center reveal" style="transition-delay: 500ms;">
+                        <a href="#contact" class="hover-target flex items-center justify-center bg-crimson text-white px-8 py-4 rounded-full font-accent font-bold uppercase text-[10px] md:text-xs tracking-widest hover:bg-white hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(200,16,46,0.4)] whitespace-nowrap" data-cursor="CHAT">
+                            Hubungi Saya
+                        </a>
+                        <a href="#skills" class="hover-target flex items-center justify-center border border-white/20 bg-black/50 backdrop-blur text-white px-8 py-4 rounded-full font-accent font-bold uppercase text-[10px] md:text-xs tracking-widest hover:border-crimson hover:text-crimson transition-all duration-300 whitespace-nowrap" data-cursor="VIEW">
+                            Lihat Keahlian
+                        </a>
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 xl:col-span-4 relative order-1 lg:order-2 w-full h-[50vh] min-h-[350px] lg:h-[85vh] lg:min-h-[600px] flex items-center lg:items-end justify-center lg:justify-end reveal" style="transition-delay: 500ms;">
-                    <div class="absolute -top-10 md:-top-20 -right-2 md:-right-10 font-display text-[clamp(8rem,25vw,20rem)] font-black text-transparent text-stroke opacity-20 pointer-events-none z-0">01</div>
-                    
-                    <div class="relative w-full max-w-[320px] sm:max-w-[400px] h-full z-10 p-2 md:p-4 mx-auto lg:mx-0">
+                <!-- Foto Asli Dipertahankan Sepenuhnya -->
+                <div class="lg:col-span-5 xl:col-span-4 relative w-full h-[45vh] min-h-[300px] lg:h-[80vh] lg:min-h-[550px] flex items-center lg:items-end justify-center lg:justify-end reveal" style="transition-delay: 500ms;">
+                    <div class="relative w-full max-w-[280px] sm:max-w-[360px] h-full z-10 p-2 md:p-4 mx-auto lg:mx-0">
                         <div class="absolute inset-0 border border-white/10 z-20 pointer-events-none"></div>
                         <div class="absolute inset-2 border border-crimson/30 z-20 pointer-events-none hidden sm:block"></div>
                         <div class="cinematic-img-wrapper h-full bg-darker glow-red">
-                            <img src="UI.png" alt="Arda Dinata" class="object-cover object-center w-full h-full" onerror="this.src='https://placehold.co/800x1200/050505/c8102e?text=PHOTO+NOT+FOUND'">
+                            <img src="UI.png" alt="Arda Dinata" class="object-cover object-center w-full h-full">
                         </div>
                         <div class="absolute bottom-6 md:bottom-10 -left-2 md:-left-10 bg-black/90 backdrop-blur-md border border-white/10 p-3 md:p-4 z-30 transform -rotate-2">
-                            <p class="font-accent text-[8px] md:text-[10px] font-bold tracking-widest text-white uppercase whitespace-nowrap"><span class="text-crimson">///</span> WEB DEVELOPER</p>
+                            <p class="font-accent text-[8px] md:text-[10px] font-bold tracking-widest text-white uppercase whitespace-nowrap"><span class="text-crimson">///</span> DIGITAL DEVELOPER</p>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
-        <section id="about" class="py-16 md:py-32 px-5 sm:px-6 md:px-12 relative border-t border-white/5 w-full">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-0 mix-blend-overlay opacity-30">
-                <h2 class="font-display font-black text-[clamp(4rem,20vw,16rem)] text-transparent text-stroke-thick leading-none block whitespace-nowrap opacity-30">WEB DEV</h2>
+        <!-- 2. TENTANG SAYA -->
+        <section id="about" class="py-20 md:py-32 px-5 sm:px-6 md:px-12 relative border-t border-white/5 w-full">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center pointer-events-none z-0 mix-blend-overlay opacity-20">
+                <h2 class="font-display font-black text-[clamp(3.5rem,15vw,16rem)] text-transparent text-stroke-thick leading-[1.2] block pb-2 opacity-40">PROFILE</h2>
             </div>
 
-            <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 relative z-10 w-full">
+            <div class="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-16 relative z-10 w-full">
                 
-                <div class="lg:col-span-4 reveal w-full">
-                    <h2 class="font-display text-[clamp(3rem,12vw,5.5rem)] font-extrabold text-white uppercase leading-[0.9] tracking-tighter w-full">
-                        <span class="block whitespace-nowrap">WHO</span>
-                        <span class="block whitespace-nowrap text-crimson">IS</span>
-                        <span class="block whitespace-nowrap">ARDA?</span>
+                <div class="lg:col-span-5 reveal w-full">
+                    <h2 class="font-display text-[clamp(2.5rem,8vw,5rem)] font-extrabold text-white uppercase leading-[1.2] tracking-normal w-full pb-2">
+                        <span class="block text-wrap-normal">WHO</span>
+                        <span class="block text-crimson text-wrap-normal">IS</span>
+                        <span class="block text-wrap-normal">ARDA?</span>
                     </h2>
                     <div class="w-12 h-[2px] bg-white mt-6 md:mt-8"></div>
                 </div>
                 
-                <div class="lg:col-span-8 flex flex-col justify-center w-full mt-4 lg:mt-0">
-                    <p class="font-body text-base sm:text-[clamp(1.125rem,3vw,2rem)] leading-snug text-gray-300 font-light reveal mb-10 md:mb-16 text-balance">
-                        Saya adalah seorang <span class="text-white font-medium">Digital Creator & Web Developer</span> yang merancang antarmuka web interaktif. Saya percaya desain bukan hanya tentang estetika, melainkan <span class="text-crimson italic">pengalaman digital yang terstruktur.</span>
+                <div class="lg:col-span-7 flex flex-col justify-center w-full">
+                    <p class="font-body text-base sm:text-[clamp(1rem,2.5vw,1.5rem)] leading-relaxed text-gray-300 font-light reveal mb-8 text-wrap-normal">
+                        Saya adalah seorang <span class="text-white font-medium">Digital Developer</span> yang memiliki keahlian dalam merancang antarmuka pengguna (UI/UX) sekaligus mengembangkan logika teknis di balik layar.
+                    </p>
+                    <p class="font-body text-sm sm:text-base leading-relaxed text-gray-400 reveal mb-10 text-wrap-normal">
+                        Saya fokus membangun arsitektur digital yang kuat melalui HTML, CSS, dan JavaScript. Saya menciptakan website yang responsif dan dapat diandalkan, serta mampu mengembangkan aplikasi web yang memiliki fungsionalitas mendalam. Layanan saya mencakup perancangan aplikasi dari awal hingga pengemasannya ke dalam format Android (.apk) menggunakan WebView, memastikan produk siap digunakan pada perangkat *mobile*.
                     </p>
                     
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 border-t border-white/10 pt-8 reveal w-full">
+                    <div class="grid grid-cols-2 gap-y-8 gap-x-4 border-t border-white/10 pt-8 reveal w-full">
                         <div>
                             <p class="font-accent text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Role</p>
-                            <p class="font-body text-xs sm:text-sm font-medium text-white">Creative<br>Web Developer</p>
+                            <p class="font-body text-xs sm:text-sm font-medium text-white leading-relaxed">Digital Developer<br>UI/UX Enthusiast</p>
                         </div>
                         <div>
-                            <p class="font-accent text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Stack</p>
-                            <p class="font-body text-xs sm:text-sm font-medium text-white">HTML / CSS<br>JavaScript</p>
-                        </div>
-                        <div>
-                            <p class="font-accent text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Specialty</p>
-                            <p class="font-body text-xs sm:text-sm font-medium text-white">Web Design<br>Web → APK</p>
-                        </div>
-                        <div>
-                            <p class="font-accent text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Location</p>
-                            <p class="font-body text-xs sm:text-sm font-medium text-white">Indonesia<br>Worldwide</p>
+                            <p class="font-accent text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Fokus Utama</p>
+                            <p class="font-body text-xs sm:text-sm font-medium text-white leading-relaxed">Web Apps<br>Android WebView</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="work" class="py-16 md:py-32 px-5 sm:px-6 md:px-12 relative bg-dark w-full">
-            <div class="bg-glow-orb w-[90vw] h-[90vw] max-w-[800px] max-h-[800px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"></div>
-
+        <!-- 3. KEAHLIAN TEKNIS -->
+        <section id="skills" class="py-20 md:py-32 px-5 sm:px-6 md:px-12 relative bg-darker border-t border-white/5 w-full">
             <div class="max-w-[1400px] mx-auto relative z-10 w-full">
-                <div class="mb-16 md:mb-32 text-left reveal w-full">
-                    <h2 class="font-display text-[clamp(2.5rem,11vw,10rem)] md:text-[clamp(4.5rem,12vw,10rem)] font-black text-white uppercase tracking-tighter leading-[0.8] w-full">
-                        <span class="block whitespace-nowrap">SELECTED</span>
-                        <span class="block whitespace-nowrap text-transparent text-stroke-thick">WORK</span>
+                
+                <div class="mb-12 md:mb-20 text-left reveal w-full">
+                    <p class="font-accent text-crimson text-[10px] md:text-sm tracking-[0.2em] uppercase font-bold mb-4">Kemampuan Inti</p>
+                    <h2 class="font-display text-[clamp(2.5rem,7vw,5rem)] font-black text-white uppercase tracking-normal leading-[1.2] pb-2 text-wrap-normal">
+                        TECHNICAL <span class="text-transparent text-stroke-thick">SKILLS</span>
                     </h2>
                 </div>
 
-                <div class="flex flex-col gap-16 md:gap-32 lg:gap-48 w-full">
+                <!-- Diperluas menjadi 8 Keahlian sesuai permintaan dengan penomoran yang rapi -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
                     
-                    <div class="group flex flex-col lg:flex-row items-center gap-6 lg:gap-10 relative w-full">
-                        <div class="w-full lg:w-1/3 order-2 lg:order-1 relative z-20 lg:pr-10 reveal">
-                            <div class="flex items-center gap-3 mb-4">
-                                <span class="font-accent text-sm text-crimson font-bold">01</span>
-                                <span class="h-[1px] w-8 bg-white/20"></span>
-                                <span class="font-accent text-[9px] tracking-widest text-gray-400 uppercase border border-white/20 px-2 py-1 block whitespace-nowrap">Demo Project</span>
-                            </div>
-                            <h3 class="font-display text-[clamp(2.5rem,10vw,4rem)] font-black text-white uppercase mb-4 md:mb-6 leading-none group-hover:text-crimson transition-colors w-full">
-                                <span class="block whitespace-nowrap">ARDA</span>
-                                <span class="block whitespace-nowrap">BARBER</span>
-                            </h3>
-                            <p class="font-body text-gray-400 text-xs md:text-sm mb-6 w-full text-balance">Website barbershop dengan desain gelap, modern, dan interaktif. Dilengkapi fitur booking dan layout editorial.</p>
-                            <a href="#" class="hover-target inline-flex items-center gap-3 text-white font-accent text-[10px] md:text-xs font-bold tracking-widest uppercase hover:text-crimson transition-colors whitespace-nowrap" data-cursor="VIEW">
-                                View Project <span class="text-lg leading-none">→</span>
-                            </a>
-                        </div>
-                        <div class="w-full lg:w-2/3 order-1 lg:order-2 relative z-10 reveal">
-                            <a href="#" class="block hover-target cinematic-img-wrapper aspect-[4/3] md:aspect-[16/10] bg-darker border border-white/10" data-cursor="OPEN">
-                                <img src="https://placehold.co/1200x800/111111/c8102e?font=oswald&text=ARDA+BARBER+MOCKUP" alt="Arda Barber">
-                            </a>
-                        </div>
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/01</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">HTML5</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Membangun struktur dasar halaman web dan antarmuka aplikasi yang semantik dan rapi.</p>
                     </div>
 
-                    <div class="group relative flex flex-col items-center text-center reveal w-full mt-8 md:mt-0">
-                        <div class="w-full max-w-full mx-auto relative z-20 mb-[-15px] md:mb-[-8%] mix-blend-difference pointer-events-none">
-                            <div class="flex items-center justify-center gap-3 mb-3 md:mb-4">
-                                <span class="font-accent text-sm text-crimson font-bold">03</span>
-                                <span class="font-accent text-[9px] tracking-widest text-gray-400 uppercase border border-white/20 px-2 py-1 block whitespace-nowrap">Demo Project</span>
-                            </div>
-                            <!-- STRICT SCALING for NEXORA: 14vw is mathematically safe for 6 chars on 320px screens -->
-                            <h3 class="font-display text-[clamp(2.75rem,14vw,10rem)] md:text-[clamp(5rem,15vw,10rem)] font-black text-white uppercase leading-none tracking-tighter w-full">
-                                <span class="block whitespace-nowrap">NEXORA</span>
-                            </h3>
-                        </div>
-                        
-                        <div class="w-full relative z-10">
-                            <a href="#" class="block hover-target cinematic-img-wrapper aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] bg-darker border border-white/10" data-cursor="OPEN">
-                                <img src="https://placehold.co/1600x700/050505/00ffff?font=oswald&text=NEXORA+MOCKUP" alt="Nexora">
-                            </a>
-                        </div>
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/02</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">CSS3</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Merancang styling visual, tata letak, tipografi modern, dan animasi antarmuka yang menarik.</p>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/03</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">JavaScript</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Mengembangkan logika aplikasi yang dinamis dan menangani interaksi pengguna secara penuh.</p>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/04</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">Responsive Design</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Penyesuaian tata letak (layout) secara otomatis agar proporsional untuk HP, tablet, dan desktop.</p>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/05</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">LocalStorage</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Implementasi penyimpanan data di perangkat secara lokal (offline) sesuai kebutuhan fungsi aplikasi.</p>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/06</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">Android WebView</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Menjalankan dan mengemas proyek berbasis web sebagai aplikasi Android APK menggunakan Android Studio.</p>
+                    </div>
+                    
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/07</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">UI / UX</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Perancangan tampilan antarmuka dan penataan alur penggunaan aplikasi agar mudah dan nyaman digunakan.</p>
+                    </div>
+
+                    <div class="bg-black/40 border border-white/10 p-6 hover:border-crimson/50 hover:bg-black/80 transition-all duration-300 reveal group">
+                        <div class="text-crimson font-display text-3xl mb-4 opacity-80 group-hover:opacity-100 transition-opacity">/08</div>
+                        <h3 class="font-display text-lg font-bold text-white uppercase tracking-normal mb-3 leading-[1.2]">Debugging</h3>
+                        <p class="font-body text-sm text-gray-400 leading-relaxed text-wrap-normal">Pemeriksaan menyeluruh pada logika sistem, perbaikan bug, dan optimasi performa JavaScript.</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. LAYANAN -->
+        <section id="services" class="py-20 md:py-32 px-5 sm:px-6 md:px-12 relative border-t border-white/5 w-full">
+            <div class="bg-glow-orb w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] top-1/2 left-0 -translate-y-1/2 opacity-20"></div>
+            
+            <div class="max-w-[1400px] mx-auto relative z-10 w-full">
+                <div class="mb-12 md:mb-20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 reveal w-full">
+                    <div>
+                        <p class="font-accent text-crimson text-[10px] md:text-sm tracking-[0.2em] uppercase font-bold mb-4">Apa yang saya kerjakan</p>
+                        <h2 class="font-display text-[clamp(2.5rem,7vw,5rem)] font-black text-white uppercase tracking-normal leading-[1.2] pb-2 text-wrap-normal">
+                            MY <span class="text-transparent text-stroke-thick">SERVICES</span>
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- Diperluas menjadi 8 Layanan, memisahkan pembangunan web app dengan APK wrapper -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 w-full">
+                    
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <!-- Nomor dekoratif diatur posisinya dan opasitasnya agar aman tidak menabrak teks -->
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">01</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/01</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Website Pribadi & Bisnis</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Pembuatan website representatif (portofolio, profil perusahaan, atau blog) dengan desain yang rapi, modern, dan disesuaikan dengan identitas brand.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">02</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/02</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Landing Page</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Desain satu halaman (single-page) yang difokuskan untuk mempromosikan produk, mengumpulkan prospek, dan meningkatkan ketertarikan audiens.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">03</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/03</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Aplikasi Web Interaktif</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Pengembangan aplikasi khusus yang dijalankan di browser menggunakan HTML, CSS, dan JavaScript untuk menyelesaikan kendala atau memproses data tertentu.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">04</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/04</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Pembuatan Aplikasi Android<br><span class="text-sm font-accent text-gray-400 lowercase tracking-widest">(Berbasis Web)</span></h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Membangun dari awal aplikasi dengan antarmuka, fitur, navigasi mobile, dan fungsionalitas lengkap yang dirancang khusus untuk Android (menggunakan arsitektur web).</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">05</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/05</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Pengemasan HTML/JS ke APK</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Layanan konversi untuk membungkus proyek website (HTML/CSS/JS) yang sudah Anda miliki ke dalam format APK Android menggunakan WebView.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">06</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/06</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Perbaikan UI/UX & Layout</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Merombak tata letak (layout) sistem lama Anda agar tampil lebih modern, proporsional, mudah digunakan, dan sepenuhnya responsif di semua perangkat.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">07</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/07</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Perbaikan Bug & JavaScript</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Mencari dan menyelesaikan konflik atau kesalahan (bug) pada script, serta mengoptimalkan jalannya fungsi sistem yang ada.</p>
+                    </div>
+
+                    <div class="group border border-white/10 p-8 relative overflow-hidden reveal bg-dark hover:bg-[#080808] transition-colors">
+                        <div class="absolute -top-4 right-2 p-6 opacity-[0.05] font-display font-black text-8xl text-white group-hover:text-crimson transition-colors pointer-events-none">08</div>
+                        <div class="text-crimson font-display text-xl mb-4 font-bold">/08</div>
+                        <h3 class="font-display text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold text-white uppercase mb-4 leading-[1.2] pb-1 tracking-normal text-wrap-normal relative z-10">Aplikasi Data LocalStorage</h3>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed max-w-md text-wrap-normal relative z-10">Membangun fitur manajemen atau penyimpanan data offline langsung di memori perangkat klien (tanpa database server eksternal) sesuai keperluan.</p>
                     </div>
 
                 </div>
             </div>
         </section>
 
+        <!-- 5. ALUR PENGERJAAN -->
+        <section id="workflow" class="py-20 md:py-32 px-5 sm:px-6 md:px-12 relative bg-darker border-t border-white/5 w-full">
+            <div class="max-w-[1400px] mx-auto relative z-10 w-full">
+                
+                <div class="mb-12 md:mb-20 text-center reveal w-full flex flex-col items-center">
+                    <h2 class="font-display text-[clamp(2.5rem,7vw,5rem)] font-black text-white uppercase tracking-normal leading-[1.2] pb-2 text-wrap-normal">
+                        WORK <span class="text-transparent text-stroke-thick">PROCESS</span>
+                    </h2>
+                    <p class="font-body text-gray-400 text-sm md:text-base mt-4 max-w-lg text-wrap-normal">Tahapan kerja yang terstruktur untuk memastikan hasil yang sesuai dengan kebutuhan teknis dan target Anda.</p>
+                </div>
+
+                <div class="max-w-3xl mx-auto relative border-l-2 border-white/10 ml-4 md:ml-auto">
+                    
+                    <div class="relative pl-8 md:pl-12 pb-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-darker border-2 border-crimson"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 01</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Konsultasi Kebutuhan</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Mendiskusikan visi, target, fitur yang diperlukan, dan menentukan apakah solusi yang tepat berupa website statis, web app interaktif, atau paket APK Android.</p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12 pb-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-darker border-2 border-crimson"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 02</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Perencanaan Desain & UI/UX</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Menyusun struktur tata letak aplikasi atau halaman (wireframe) dan memastikan alur interaksi antarmuka ramah pengguna (user-friendly).</p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12 pb-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-darker border-2 border-crimson"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 03</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Pengembangan Kode (Coding)</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Mengeksekusi desain menggunakan HTML dan CSS, lalu menghidupkan fungsionalitas dan logika interaksi aplikasi menggunakan JavaScript.</p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12 pb-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-darker border-2 border-crimson"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 04</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Pengujian & Debugging</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Memastikan antarmuka berjalan responsif di semua perangkat, fungsi berjalan sesuai logika, dan melakukan perbaikan (debugging) jika terdapat kendala.</p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12 pb-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-darker border-2 border-crimson"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 05</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Pengemasan WebView APK</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Bagi proyek aplikasi Android, file web akan dibungkus menggunakan WebView dalam lingkungan Android Studio untuk dijadikan file siap instalasi (.apk).</p>
+                    </div>
+
+                    <div class="relative pl-8 md:pl-12 reveal">
+                        <div class="absolute top-0 left-[-9px] w-4 h-4 rounded-full bg-crimson shadow-[0_0_10px_#c8102e]"></div>
+                        <p class="font-accent text-crimson text-[10px] md:text-xs font-bold tracking-widest uppercase mb-2">Tahap 06</p>
+                        <h4 class="font-display text-xl md:text-2xl font-bold text-white uppercase tracking-normal mb-2 leading-[1.2] pb-1 text-wrap-normal">Penyerahan Hasil</h4>
+                        <p class="font-body text-sm md:text-base text-gray-400 leading-relaxed text-wrap-normal">Menyerahkan hasil akhir berupa file kode (HTML/CSS/JS) untuk di-*hosting* atau file APK untuk dipasang di perangkat, beserta instruksi penggunaan dasar.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. TEKNOLOGI -->
+        <div class="w-full py-8 border-y border-white/5 overflow-hidden bg-[#020202]">
+            <div class="flex flex-wrap justify-center gap-6 md:gap-12 px-5 opacity-50 font-display font-bold text-sm md:text-xl tracking-widest text-white uppercase">
+                <span>HTML5</span>
+                <span class="text-crimson">•</span>
+                <span>CSS3</span>
+                <span class="text-crimson">•</span>
+                <span>JAVASCRIPT</span>
+                <span class="text-crimson">•</span>
+                <span>LOCALSTORAGE</span>
+                <span class="text-crimson">•</span>
+                <span>WEBVIEW</span>
+            </div>
+        </div>
+
+        <!-- 7. KONTAK -->
         <section id="contact" class="py-20 md:py-32 lg:py-48 px-5 sm:px-6 md:px-12 relative flex flex-col items-center justify-center text-center min-h-[80svh] w-full">
             <div class="bg-glow-orb w-[150vw] h-[150vw] md:w-[100vw] md:h-[100vw] max-w-[1200px] max-h-[1200px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-30"></div>
             <div class="absolute inset-0 bg-grid pointer-events-none opacity-50 z-0"></div>
@@ -360,46 +514,47 @@
             <div class="relative z-10 w-full max-w-[1200px] mx-auto reveal">
                 <p class="font-accent text-crimson text-[10px] md:text-sm tracking-[0.3em] uppercase mb-6 font-bold block whitespace-nowrap">Initiate Connection</p>
                 
-                <h2 class="font-display text-[clamp(2.25rem,9vw,9rem)] md:text-[clamp(3.5rem,10vw,9rem)] font-black text-white uppercase tracking-tighter leading-[0.85] mb-8 md:mb-12 flex flex-col items-center w-full">
-                    <span class="block whitespace-nowrap">LET'S BUILD</span>
-                    <span class="block whitespace-nowrap text-transparent text-stroke-thick">SOMETHING</span>
-                    <span class="block whitespace-nowrap text-glow">GREAT.</span>
+                <h2 class="font-display text-[clamp(1.8rem,7.5vw,9rem)] md:text-[clamp(3.5rem,8vw,9rem)] font-black text-white uppercase tracking-normal leading-[1.2] mb-8 md:mb-12 flex flex-col items-center w-full pb-2">
+                    <span class="block text-wrap-normal">LET'S BUILD</span>
+                    <span class="block text-transparent text-stroke-thick text-wrap-normal">SOMETHING</span>
+                    <span class="block text-glow text-wrap-normal">GREAT.</span>
                 </h2>
                 
-                <p class="font-body text-gray-300 text-sm md:text-lg lg:text-xl w-full sm:max-w-xl mx-auto mb-12 md:mb-16 text-balance">
-                    Punya ide website gila? Mari wujudkan menjadi realitas digital yang memukau dan profesional.
+                <p class="font-body text-gray-300 text-sm md:text-lg lg:text-xl w-full sm:max-w-xl mx-auto mb-12 md:mb-16 text-wrap-normal leading-relaxed">
+                    Punya ide website statis, aplikasi web, atau aplikasi Android WebView? Mari diskusikan kebutuhan teknismu dan kita wujudkan menjadi produk nyata.
                 </p>
                 
                 <div class="magnetic-wrap mb-16 md:mb-24 w-full">
                     <a href="https://wa.me/6289636503978" target="_blank" rel="noopener noreferrer" class="hover-target inline-flex items-center justify-center bg-crimson text-white px-8 py-4 md:px-12 md:py-6 rounded-full font-accent font-bold uppercase text-xs md:text-sm tracking-widest hover:bg-white hover:text-black transition-all duration-300 w-full sm:w-auto shadow-[0_0_30px_rgba(200,16,46,0.5)] group whitespace-nowrap" data-cursor="CHAT">
-                        Start A Project <span class="ml-3 transform group-hover:translate-x-2 transition-transform">→</span>
+                        Kirim Pesan WhatsApp <span class="ml-3 transform group-hover:translate-x-2 transition-transform">→</span>
                     </a>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-10 border-t border-white/10 pt-10 md:pt-12 text-center sm:text-left font-accent w-full">
                     <div>
                         <p class="text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Location</p>
-                        <p class="text-xs md:text-sm text-white block whitespace-nowrap">Indonesia <br> Worldwide</p>
+                        <p class="text-xs md:text-sm text-white block leading-relaxed">Indonesia <br> Tersedia Remote</p>
                     </div>
                     <div>
                         <p class="text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Direct Contact</p>
-                        <a href="https://wa.me/6289636503978" class="hover-target text-xs md:text-sm text-white hover:text-crimson transition-colors block whitespace-nowrap">WA: 089636503978</a>
+                        <a href="https://wa.me/6289636503978" class="hover-target text-xs md:text-sm text-white hover:text-crimson transition-colors block leading-relaxed">WA: 089636503978</a>
                     </div>
                     <div>
-                        <p class="text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Social</p>
-                        <a href="https://instagram.com/ardadnta_" class="hover-target text-xs md:text-sm text-white hover:text-crimson transition-colors block whitespace-nowrap">IG: @ardadnta_</a>
+                        <p class="text-[9px] md:text-[10px] tracking-widest text-gray-500 uppercase mb-2">Social / Dev</p>
+                        <a href="https://instagram.com/ardadnta_" class="hover-target text-xs md:text-sm text-white hover:text-crimson transition-colors block leading-relaxed mb-1">IG: @ardadnta_</a>
+                        <a href="https://github.com/dinataarda" class="hover-target text-xs md:text-sm text-white hover:text-crimson transition-colors block leading-relaxed">GitHub: dinataarda</a>
                     </div>
                 </div>
             </div>
         </section>
         
-        <footer class="py-6 border-t border-white/5 bg-darker text-center relative z-20 w-full">
+        <footer class="py-6 border-t border-white/5 bg-darker text-center relative z-20 w-full pb-8 md:pb-6">
             <div class="flex flex-col sm:flex-row justify-between items-center px-5 md:px-12 max-w-[1400px] mx-auto gap-3 w-full">
-                <div class="font-display font-bold text-lg md:text-xl tracking-tighter text-white whitespace-nowrap">
-                    ARDA<span class="text-crimson">DEV</span>
+                <div class="font-display font-bold text-lg md:text-xl tracking-normal text-white flex items-center gap-1 justify-center sm:justify-start">
+                    <span>ARDA</span><span class="text-crimson">DEV</span>
                 </div>
-                <div class="font-accent text-[8px] md:text-[10px] tracking-widest text-gray-500 uppercase whitespace-nowrap">
-                    Web Developer & Digital Creator &copy; <span id="year"></span>
+                <div class="font-accent text-[8px] md:text-[10px] tracking-widest text-gray-500 uppercase text-wrap-normal">
+                    Digital Developer &copy; <span id="year"></span>
                 </div>
             </div>
         </footer>
